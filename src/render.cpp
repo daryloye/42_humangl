@@ -73,6 +73,8 @@ void draw() {
 	glBindBuffer(GL_ARRAY_BUFFER, gVertexBufferObject);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glUseProgram(0);
 }
 
 

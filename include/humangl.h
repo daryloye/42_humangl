@@ -12,6 +12,7 @@
 #include <glm/ext/matrix_transform.hpp>         // glm::translate, glm::rotate, glm::scale
 #include <glm/ext/matrix_clip_space.hpp>        // glm::perspective
 #include <glm/ext/scalar_constants.hpp>         // glm::pi
+#include <glm/gtc/type_ptr.hpp>
 
 #define SCREEN_HEIGHT   600
 #define SCREEN_WIDTH    800
@@ -43,17 +44,22 @@ void createGraphicsPipeline();
 // cube.cpp
 class Cube {
 	private:
+    std::vector<glm::vec3>	_vertices;
+    std::vector<GLuint>			_indices;
+  
     glm::vec3               _center;
-		std::vector<glm::vec3>	_vertices;
-		std::vector<GLuint>			_indices;
+    glm::vec3               _scale;
 
 		GLuint	_vao;
 		GLuint	_vbo;
   
   public:
     Cube(glm::vec3 center);
+    
     void upload();
     void draw();
+
+    void scale(glm::vec3 factor);
 };
 
 inline Cube c = Cube( glm::vec3(0, 0, 0) );

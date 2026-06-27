@@ -13,6 +13,10 @@ OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 .SILENT:
 
+install:
+	sudo apt update
+	sudo apt install -y libsdl2-dev libglm-dev
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
@@ -30,5 +34,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
-
+.PHONY: all install clean fclean re

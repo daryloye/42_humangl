@@ -2,47 +2,39 @@
 
 // Defines the vertex geometry
 void vertexSpecification() {
-	const std::vector<GLfloat> vertexPosition {
-		-0.8f, -0.8f, 0.0f,
-		0.8f, -0.8f, 0.0f,
-		0.0f, 0.8f, 0.0f
-	};
+	// const std::vector<GLfloat> vertexPosition {
+	// 	-0.5f, 0.5f, 0.0f,
+	// 	-0.5f, -0.5f, 0.0f,
+	// 	0.5f, 0.5f, 0.0f,
+	// 	0.5f, -0.5f, 0.0f,
+
+	// 	0.5f, 0.5f, 0.0f,
+	// 	0.5f, -0.5f, 0.0f,
+	// 	0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
+	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
+
+	// 	0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
+	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
+	// 	-0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
+	// 	-0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
+
+	// 	-0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
+	// 	-0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
+	// 	-0.5f, 0.5f, 0.0f,
+	// 	-0.5f, -0.5f, 0.0f,
+
+	// 	-0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
+	// 	-0.5f, 0.5f, 0.0f,
+	// 	0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
+	// 	0.5f, 0.5f, 0.0f,
+
+	// 	-0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
+	// 	-0.5f, -0.5f, 0.0f,
+	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
+	// 	0.5f, -0.5f, 0.0f,
+	// };
   
-  const std::vector<GLfloat> vertexColours {
-    1.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 1.0f
-  };
-  
-  // generate and bind vertex array object (VAO)
-	glGenVertexArrays(1, &gVertexArrayObject);
-	glBindVertexArray(gVertexArrayObject);
-
-  // 1st VBO for vertex positions
-	glGenBuffers(1, &gVertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, gVertexBufferObject);
-	glBufferData(	
-		GL_ARRAY_BUFFER, 
-		vertexPosition.size() * sizeof(GLfloat),
-		vertexPosition.data(),
-		GL_STATIC_DRAW
-	);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);   // Array 0 has 3 floats per vertex
-
-  // 2nd VBO for colours
-	glGenBuffers(1, &gColourBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, gColourBufferObject);
-	glBufferData(	
-		GL_ARRAY_BUFFER, 
-		vertexColours.size() * sizeof(GLfloat),
-		vertexColours.data(),
-		GL_STATIC_DRAW
-	);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);   // Array 1 has 3 floats per vertex
-
-	glBindVertexArray(0);
+	c.upload();
 }
 
 

@@ -48,8 +48,21 @@ void input() {
 	SDL_Event event;
 
 	while (SDL_PollEvent(&event) != 0) {
-		if (event.type == SDL_QUIT) {
-			isRunning = false;
+		switch (event.type) {
+			case SDL_QUIT:
+				isRunning = false;
+				break;
+
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym) {
+					case SDLK_UP:
+						g_offset += 0.01;
+						break;
+					case SDLK_DOWN:
+						g_offset -= 0.01;
+						break;
+				}
+				break;
 		}
 	}
 }
@@ -60,21 +73,21 @@ void predraw() {
 	glDisable(GL_CULL_FACE);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(1.f, 1.f, 0.f, 1.f);											// yellow colour background
+	glClearColor(0, 0, 0, 0);											// black colour background
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
+	
 	glUseProgram(gGraphicsPipelineShaderProgram);
 }
 
 
 void draw() {
-	glBindVertexArray(gVertexArrayObject);
-	glBindBuffer(GL_ARRAY_BUFFER, gVertexBufferObject);
+	GLint offsetLocation = glGetUniformLocation(gGraphicsPipelineShaderProgram, "u_offset");
+	glUniform1f(offsetLocation, g_offset);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	c.draw();
 
-	glUseProgram(0);
+	glUseProgram(0);		// stop using shader program
 }
 
 

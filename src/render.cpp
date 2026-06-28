@@ -68,7 +68,7 @@ void input() {
 }
 
 
-void predraw() {
+void draw() {
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
@@ -77,16 +77,10 @@ void predraw() {
 
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
-	glUseProgram(gGraphicsPipelineShaderProgram);
-}
+	glUseProgram(gShaderProgram);
 
-
-void draw() {
-	GLint offsetLocation = glGetUniformLocation(gGraphicsPipelineShaderProgram, "u_offset");
-	glUniform1f(offsetLocation, g_offset);
-
-	c.draw();
-
+	human.draw();
+	
 	glUseProgram(0);		// stop using shader program
 }
 
@@ -94,7 +88,6 @@ void draw() {
 void loop() {
 	while (isRunning) {
 		input();
-		predraw();
 		draw();
 		SDL_GL_SwapWindow(gWindow);
 	}

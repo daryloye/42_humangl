@@ -14,7 +14,7 @@
 #include <glm/ext/scalar_constants.hpp>         // glm::pi
 #include <glm/gtc/type_ptr.hpp>
 
-#define SCREEN_HEIGHT   600
+#define SCREEN_HEIGHT   800
 #define SCREEN_WIDTH    800
 
 inline SDL_Window* gWindow = nullptr;
@@ -25,12 +25,7 @@ inline glm::vec2 gDepthOffset = glm::vec2(0.25f, 0.25f);
 inline bool isRunning = true;
 inline float g_offset = 0.0f;
 
-inline GLuint gVertexArrayObject = 0;
-inline GLuint gVertexBufferObject = 0;
-inline GLuint gColourArrayObject = 0;
-inline GLuint gColourBufferObject = 0;
-
-inline GLuint gGraphicsPipelineShaderProgram = 0;
+inline GLuint gShaderProgram = 0;
 
 // render.cpp
 void initialize();
@@ -46,20 +41,36 @@ class Cube {
 	private:
     std::vector<glm::vec3>	_vertices;
     std::vector<GLuint>			_indices;
-  
-    glm::vec3               _center;
-    glm::vec3               _scale;
+    glm::mat4               _model;
+    glm::vec3               _colour;
 
 		GLuint	_vao;
 		GLuint	_vbo;
   
   public:
-    Cube(glm::vec3 center);
+    Cube();
     
     void upload();
     void draw();
 
+    void setColour(glm::vec3 colour);
+
+    // Transformations follow the order: translate, rotate, scale
+    void translate(glm::vec3 distance);
+    void rotate(GLfloat radians, glm::vec3 axis);
     void scale(glm::vec3 factor);
 };
 
-inline Cube c = Cube( glm::vec3(0, 0, 0) );
+
+// human.cpp
+class Human {
+  public:
+    Cube head;
+    Cube torso;
+
+    Human();
+    void upload();
+    void draw();
+};
+
+inline Human human = Human();

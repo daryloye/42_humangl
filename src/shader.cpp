@@ -33,8 +33,16 @@ void vertexSpecification() {
 	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
 	// 	0.5f, -0.5f, 0.0f,
 	// };
-  
-	c.upload();
+
+	human.head.translate(glm::vec3(0, 0.25, 0));
+	human.head.rotate(glm::radians(45.0f), glm::vec3(0, 1, 0));
+	human.head.scale(glm::vec3(0.25));
+
+	human.torso.translate(glm::vec3(0.5, -0.25, 0));
+	human.torso.rotate(glm::radians(45.0f), glm::vec3(0, 1, 0));
+	human.torso.scale(glm::vec3(0.25));
+	
+	human.upload();
 }
 
 
@@ -95,16 +103,17 @@ std::string getShaderSource(const std::string& filename) {
 
 
 void createGraphicsPipeline() {
-  // vertex shader defines the vertices of the shape
-  // fragment shader defines the colour in the shape
-
-  std::string vertexShaderFile = "./shaders/triangle.vert";
-  std::string fragmentShaderFile = "./shaders/triangle.frag";
-
-	gGraphicsPipelineShaderProgram = createShaderProgram( 
-    getShaderSource(vertexShaderFile), 
-    getShaderSource(fragmentShaderFile)
-  );
-	if (gGraphicsPipelineShaderProgram == 0)
+	// vertex shader defines the vertices of the shape
+	// fragment shader defines the colour in the shape
+ 
+	std::string vertexShaderFile = "./shaders/cube.vert";
+	std::string fragmentShaderFile = "./shaders/cube.frag";
+	
+	gShaderProgram = createShaderProgram(
+		getShaderSource(vertexShaderFile), 
+		getShaderSource(fragmentShaderFile)
+	);
+	if (gShaderProgram == 0) {
 		exit(1);
+	}
 }

@@ -20,8 +20,6 @@
 inline SDL_Window* gWindow = nullptr;
 inline SDL_GLContext gGLContext = nullptr;
 
-inline glm::vec2 gDepthOffset = glm::vec2(0.25f, 0.25f);
-
 inline bool isRunning = true;
 inline float g_offset = 0.0f;
 
@@ -39,13 +37,14 @@ void createGraphicsPipeline();
 // cube.cpp
 class Cube {
 	private:
-    std::vector<glm::vec3>	_vertices;
+    std::vector<GLfloat>	  _vertices;
     std::vector<GLuint>			_indices;
     glm::mat4               _model;
     glm::vec3               _colour;
 
 		GLuint	_vao;
 		GLuint	_vbo;
+    GLuint  _ibo;
   
   public:
     Cube();

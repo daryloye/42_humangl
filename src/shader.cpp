@@ -2,40 +2,8 @@
 
 // Defines the vertex geometry
 void vertexSpecification() {
-	// const std::vector<GLfloat> vertexPosition {
-	// 	-0.5f, 0.5f, 0.0f,
-	// 	-0.5f, -0.5f, 0.0f,
-	// 	0.5f, 0.5f, 0.0f,
-	// 	0.5f, -0.5f, 0.0f,
-
-	// 	0.5f, 0.5f, 0.0f,
-	// 	0.5f, -0.5f, 0.0f,
-	// 	0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
-	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
-
-	// 	0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
-	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
-	// 	-0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
-	// 	-0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
-
-	// 	-0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
-	// 	-0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
-	// 	-0.5f, 0.5f, 0.0f,
-	// 	-0.5f, -0.5f, 0.0f,
-
-	// 	-0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
-	// 	-0.5f, 0.5f, 0.0f,
-	// 	0.5f + gDepthOffset.x, 0.5f + gDepthOffset.y, 0.0f,
-	// 	0.5f, 0.5f, 0.0f,
-
-	// 	-0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
-	// 	-0.5f, -0.5f, 0.0f,
-	// 	0.5f + gDepthOffset.x, -0.5f + gDepthOffset.y, 0.0f,
-	// 	0.5f, -0.5f, 0.0f,
-	// };
-
 	human.head.translate(glm::vec3(0, 0.25, 0));
-	human.head.rotate(glm::radians(45.0f), glm::vec3(0, 1, 0));
+	human.head.rotate(glm::radians(45.0f), glm::vec3(0, 0, 1));
 	human.head.scale(glm::vec3(0.25));
 
 	human.torso.translate(glm::vec3(0.5, -0.25, 0));
@@ -97,17 +65,14 @@ std::string getShaderSource(const std::string& filename) {
   }
 
   file.close();
-  
+
   return source;
 }
 
 
 void createGraphicsPipeline() {
-	// vertex shader defines the vertices of the shape
-	// fragment shader defines the colour in the shape
- 
-	std::string vertexShaderFile = "./shaders/cube.vert";
-	std::string fragmentShaderFile = "./shaders/cube.frag";
+	std::string vertexShaderFile = "./shaders/cube.vert";		// define the vertices
+	std::string fragmentShaderFile = "./shaders/cube.frag";		// defines the colours
 	
 	gShaderProgram = createShaderProgram(
 		getShaderSource(vertexShaderFile), 

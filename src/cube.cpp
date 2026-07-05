@@ -2,18 +2,21 @@
 
 Cube::Cube()
 : _vertices{
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-    glm::vec3( 0.5f,  0.5f,  0.5f),
-    glm::vec3(-0.5f,  0.5f,  0.5f),
+    // front face
+    -0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
     
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f,  0.5f, -0.5f),
-    glm::vec3(-0.5f,  0.5f, -0.5f)
+    // back face
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f
   },
 
   _indices{
+    // 2 triangles for each face
     0, 1, 2,  0, 2, 3,
     5, 4, 7,  5, 7, 6,
     4, 0, 3,  4, 3, 7,
@@ -31,17 +34,27 @@ Cube::Cube()
 
 
 void Cube::upload() {
-  // generate and bind vertex array object (VAO)
+  // generate and bind Vertex Array Object (VAO)
   glGenVertexArrays(1, &_vao);
   glBindVertexArray(_vao);
 
-  // VBO for vertex positions
+  // Vertex Buffer Object (VBO) to store array of vertices
   glGenBuffers(1, &_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   glBufferData(
     GL_ARRAY_BUFFER,
-    _vertices.size() * sizeof(glm::vec3),
+    _vertices.size() * sizeof(GLfloat),
     _vertices.data(),
+    GL_STATIC_DRAW
+  );
+
+  // Index Buffer Object (IBO) to store array of indicies
+  glGenBuffers(1, &_ibo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
+  glBufferData(
+    GL_ELEMENT_ARRAY_BUFFER,
+    _indices.size() * sizeof(GLuint),
+    _indices.data(),
     GL_STATIC_DRAW
   );
 
@@ -59,7 +72,7 @@ void Cube::draw() {
 
   glBindVertexArray(_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, _vertices.size());
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }
 
 void Cube::setColour(glm::vec3 colour) {

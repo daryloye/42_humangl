@@ -1,10 +1,9 @@
 #include "humangl.h"
 
-
 int main() {
 	initialize();
 
-	vertexSpecification();
+	human.upload();
 	createGraphicsPipeline();
 
 	loop();

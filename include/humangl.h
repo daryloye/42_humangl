@@ -31,7 +31,6 @@ void loop();
 void cleanup();
 
 // shader.cpp
-void vertexSpecification();
 void createGraphicsPipeline();
 
 // cube.cpp
@@ -47,12 +46,10 @@ class Cube {
     GLuint  _ibo;
   
   public:
-    Cube();
-    
+    Cube();    
+    void setColour(glm::vec3 colour);
     void upload();
     void draw();
-
-    void setColour(glm::vec3 colour);
 
     // Transformations follow the order: translate, rotate, scale
     void translate(glm::vec3 distance);
@@ -66,6 +63,17 @@ class Human {
   public:
     Cube head;
     Cube torso;
+
+    Cube leftUpperArm;
+    Cube leftLowerArm;
+    Cube rightUpperArm;
+    Cube rightLowerArm;
+    
+    Cube leftUpperLeg;
+    Cube leftLowerLeg;
+    Cube rightUpperLeg;
+    Cube rightLowerLeg;
+
 
     Human();
     void upload();

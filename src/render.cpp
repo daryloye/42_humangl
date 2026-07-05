@@ -73,14 +73,11 @@ void draw() {
 	glDisable(GL_CULL_FACE);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(0, 0, 0, 0);											// black colour background
-
+	glClearColor(0, 0, 0, 0);								// black colour background
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 	glUseProgram(gShaderProgram);
-
 	human.draw();
-	
 	glUseProgram(0);		// stop using shader program
 }
 

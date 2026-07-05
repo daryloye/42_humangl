@@ -1,19 +1,5 @@
 #include "humangl.h"
 
-// Defines the vertex geometry
-void vertexSpecification() {
-	human.head.translate(glm::vec3(0, 0.25, 0));
-	human.head.rotate(glm::radians(45.0f), glm::vec3(0, 0, 1));
-	human.head.scale(glm::vec3(0.25));
-
-	human.torso.translate(glm::vec3(0.5, -0.25, 0));
-	human.torso.rotate(glm::radians(45.0f), glm::vec3(0, 1, 0));
-	human.torso.scale(glm::vec3(0.25));
-	
-	human.upload();
-}
-
-
 GLuint compileShader(GLuint type, const std::string& source) {
 	GLuint shaderObject = glCreateShader(type);
 

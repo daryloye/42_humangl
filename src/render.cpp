@@ -57,6 +57,7 @@ void input() {
 				switch (event.key.keysym.sym) {
 					case SDLK_UP:
 						g_offset += 0.01;
+						human.head.print();
 						break;
 					case SDLK_DOWN:
 						g_offset -= 0.01;

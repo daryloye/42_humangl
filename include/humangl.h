@@ -35,45 +35,61 @@ void createGraphicsPipeline();
 
 // cube.cpp
 class Cube {
-	private:
+	public:
     std::vector<GLfloat>	  _vertices;
     std::vector<GLuint>			_indices;
-    glm::mat4               _model;
-    glm::vec3               _colour;
-
+    
+    glm::mat4   _model;
+    glm::vec3   _colour;
+    glm::vec3   _position;
+    glm::vec3   _rotation;
+    glm::vec3   _scale;
+    
 		GLuint	_vao;
 		GLuint	_vbo;
     GLuint  _ibo;
-  
-  public:
-    Cube();    
-    void setColour(glm::vec3 colour);
+    
+  // public:
+    Cube();
     void upload();
     void draw();
-
-    // Transformations follow the order: translate, rotate, scale
+    
+    void setColour(glm::vec3 colour);
     void translate(glm::vec3 distance);
-    void rotate(GLfloat radians, glm::vec3 axis);
+    void rotate(glm::vec3 radians);
     void scale(glm::vec3 factor);
+    void updateModel(); 
+    void print();
+};
+
+
+// parts.cpp
+class Torso : public Cube {
+  public:
+    Torso();
+};
+
+class Limb : public Cube {
+  public:
+    Limb();
 };
 
 
 // human.cpp
 class Human {
   public:
-    Cube head;
-    Cube torso;
+    Limb head;
+    Torso torso;
 
-    Cube leftUpperArm;
-    Cube leftLowerArm;
-    Cube rightUpperArm;
-    Cube rightLowerArm;
+    Limb leftUpperArm;
+    Limb leftLowerArm;
+    Limb rightUpperArm;
+    Limb rightLowerArm;
     
-    Cube leftUpperLeg;
-    Cube leftLowerLeg;
-    Cube rightUpperLeg;
-    Cube rightLowerLeg;
-
+    Limb leftUpperLeg;
+    Limb leftLowerLeg;
+    Limb rightUpperLeg;
+    Limb rightLowerLeg;
 
     Human();
     void upload();

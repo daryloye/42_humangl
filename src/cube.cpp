@@ -1,4 +1,5 @@
 #include "humangl.h"
+#include <glm/gtx/string_cast.hpp>
 
 Cube::Cube()
 : _vertices{
@@ -25,11 +26,15 @@ Cube::Cube()
     4, 5, 1,  4, 1, 0
   },
 
-  _model(glm::mat4(1.0f)),
+  _model(glm::mat4(1)),
   _colour(glm::vec3(0)),
-  
+  _position(glm::vec3(0)),
+  _rotation(glm::vec3(0)),
+  _scale(glm::vec3(1)),
+
   _vao(0),
-  _vbo(0)
+  _vbo(0),
+  _ibo(0)
 {}
 
 
@@ -75,18 +80,35 @@ void Cube::draw() {
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }
 
+
 void Cube::setColour(glm::vec3 colour) {
   _colour = colour;
 }
 
 void Cube::translate(glm::vec3 distance) {
-  _model = glm::translate(_model, distance);
+  _position += distance;
 }
 
-void Cube::rotate(GLfloat radians, glm::vec3 axis) {
-  _model = glm::rotate(_model, radians, axis);
+void Cube::rotate(glm::vec3 radians) {
+  _rotation += radians;
 }
 
 void Cube::scale(glm::vec3 factor) {
-  _model = glm::scale(_model, factor);
+  _scale *= factor;
+}
+
+void Cube::updateModel() {
+    // Transformations follow the order: translate, rotate, scale
+    _model = glm::translate(_model, _position);
+    _model = glm::rotate(_model, _rotation.x, glm::vec3(1, 0, 0));
+    _model = glm::rotate(_model, _rotation.y, glm::vec3(0, 1, 0));
+    _model = glm::rotate(_model, _rotation.z, glm::vec3(0, 0, 1));
+    _model = glm::scale(_model, _scale);
+}
+
+void Cube::print() {
+  std::cout << glm::to_string(_position) << std::endl;
+  // std::cout << "scale x: " << glm::length(glm::vec3(_model[0])) << std::endl;
+  // std::cout << "scale y: " << glm::length(glm::vec3(_model[1])) << std::endl;
+  // std::cout << "scale z: " << glm::length(glm::vec3(_model[2])) << std::endl;
 }

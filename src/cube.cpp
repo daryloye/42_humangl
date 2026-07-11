@@ -25,12 +25,15 @@ Cube::Cube()
     4, 5, 1,  4, 1, 0
   },
 
-  _model(glm::mat4(0)),
-  _colour(glm::vec3(0)),
-  _position(glm::vec3(0)),
-  _rotation(glm::vec3(0)),
-  _scale(glm::vec3(1)),
-  _anchorPoint(glm::vec3(0)),
+  _model(glm::mat4(1.0f)),
+  _transformModel(glm::mat4(1.0f)),
+  _colour(glm::vec3(0.0f)),
+  _position(glm::vec3(0.0f)),
+  _rotation(glm::vec3(0.0f)),
+  _scale(glm::vec3(1.0f)),
+  
+  _parent(nullptr),
+  _anchorPoint(glm::vec3(0.0f)),
 
   _vao(0),
   _vbo(0),
@@ -86,15 +89,31 @@ Cube& Cube::setColour(glm::vec3 colour) {
   return *this;
 }
 
+
+Cube& Cube::attachTo(Cube& parent, glm::vec3 anchorPoint, glm::vec3 direction) {
+    _parent = &parent;
+
+    // sets the anchor point relative to the parent cube
+    _anchorPoint = anchorPoint * _parent->_scale;
+    _position = 0.5f * direction * _scale;
+    _rotation = _parent->_rotation;
+    _transformModel = _parent->_transformModel;
+
+    return *this;
+}
+
+
 Cube& Cube::translate(glm::vec3 distance) {
   _position += distance;
   return *this;
 }
 
+
 Cube& Cube::rotate(glm::vec3 radians) {
   _rotation += radians;
   return *this;
 }
+
 
 Cube& Cube::scale(glm::vec3 factor) {
   _scale *= factor;
@@ -102,33 +121,32 @@ Cube& Cube::scale(glm::vec3 factor) {
 }
 
 
-glm::mat4 Cube::updateModel(glm::mat4 transformModel) {
-
-  glm::vec4 anchorPoint = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-  glm::vec4 localOffset = glm::vec4(0.0f, 0.125f, 0.0f, 0.0f);
-
-  glm::vec4 vectorRight   = glm::normalize(transformModel * glm::vec4(1, 0, 0, 0));
-  glm::vec4 vectorUp      = glm::normalize(transformModel * glm::vec4(0, 1, 0, 0));
-  glm::vec4 vectorForward = glm::normalize(transformModel * glm::vec4(0, 0, 1, 0));
-
+Cube& Cube::updateModel() {
+  // worldPosition aligns children cubes to the parent's position
+  glm::vec4 vectorRight   = glm::normalize(_transformModel * glm::vec4(1, 0, 0, 0));
+  glm::vec4 vectorUp      = glm::normalize(_transformModel * glm::vec4(0, 1, 0, 0));
+  glm::vec4 vectorForward = glm::normalize(_transformModel * glm::vec4(0, 0, 1, 0));
+  
   glm::vec3 worldPosition = glm::vec3(
-    transformModel      * anchorPoint
+    _transformModel  * glm::vec4(_anchorPoint, 1.0f)
     + vectorRight   * _position.x
     + vectorUp      * _position.y
     + vectorForward * _position.z
   );
-
-  // Transformations follow the order: translate, rotate, scale
-  // _model = glm::translate(_model, _position);
-  transformModel = glm::translate(transformModel, worldPosition);
-
-  transformModel = glm::rotate(transformModel, _rotation.x, glm::vec3(1, 0, 0));
-  transformModel = glm::rotate(transformModel, _rotation.y, glm::vec3(0, 1, 0));
-  transformModel = glm::rotate(transformModel, _rotation.z, glm::vec3(0, 0, 1));
-
-  _model = glm::scale(transformModel, _scale);  // want to send translation and rotation to children, but not the scaling
   
-  return transformModel;
+  // Transformations follow the order: translate, rotate, scale
+  _transformModel = glm::mat4(1.0f);
+
+  _transformModel = glm::translate(_transformModel, worldPosition);
+
+  _transformModel = glm::rotate(_transformModel, _rotation.x, glm::vec3(1, 0, 0));
+  _transformModel = glm::rotate(_transformModel, _rotation.y, glm::vec3(0, 1, 0));
+  _transformModel = glm::rotate(_transformModel, _rotation.z, glm::vec3(0, 0, 1));
+
+  // want to send translation and rotation to children, but not the scaling
+  _model = glm::scale(_transformModel, _scale);  
+  
+  return *this;
 }
 
 

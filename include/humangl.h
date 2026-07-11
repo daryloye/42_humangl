@@ -36,64 +36,55 @@ void createGraphicsPipeline();
 
 // cube.cpp
 class Cube {
-	public:
+	private:
     std::vector<GLfloat>	  _vertices;
     std::vector<GLuint>			_indices;
     
     glm::mat4   _model;
+    glm::mat4   _transformModel;    // used to send translation and rotation to children, but not scaling
     glm::vec3   _colour;
     glm::vec3   _position;
     glm::vec3   _rotation;
     glm::vec3   _scale;
-    glm::vec3   _anchorPointToTorso;
+    
+    Cube*       _parent;
+    glm::vec3   _anchorPoint;
     
 		GLuint	_vao;
 		GLuint	_vbo;
     GLuint  _ibo;
     
-  // public:
+  public:
     Cube();
     void upload();
     void draw();
     
     Cube& setColour(glm::vec3 colour);
+    Cube& attachTo(Cube& parent, glm::vec3 anchorPoint, glm::vec3 direction);
+
     Cube& translate(glm::vec3 distance);
     Cube& rotate(glm::vec3 radians);
     Cube& scale(glm::vec3 factor);
-    
-    glm::mat4 updateModel(glm::mat4 baseModel); 
+    Cube& updateModel(); 
     
     void print();
 };
 
-
-// parts.cpp
-class Torso : public Cube {
-  public:
-    Torso();
-};
-
-class Limb : public Cube {
-  public:
-    Limb();
-};
-
-
 // human.cpp
 class Human {
   public:
-    Limb head;
-    Torso torso;
+    Cube head;
+    Cube torso;
 
-    Limb leftUpperArm;
-    Limb leftLowerArm;
-    Limb rightUpperArm;
-    Limb rightLowerArm;
+    Cube leftUpperArm;
+    Cube leftLowerArm;
+    Cube rightUpperArm;
+    Cube rightLowerArm;
     
-    Limb leftUpperLeg;
-    Limb leftLowerLeg;
-    Limb rightUpperLeg;
-    Limb rightLowerLeg;
+    Cube leftUpperLeg;
+    Cube leftLowerLeg;
+    Cube rightUpperLeg;
+    Cube rightLowerLeg;
 
     Human();
     void upload();

@@ -1,5 +1,4 @@
 #include "humangl.h"
-#include <glm/gtx/string_cast.hpp>
 
 Cube::Cube()
 : _vertices{
@@ -26,11 +25,12 @@ Cube::Cube()
     4, 5, 1,  4, 1, 0
   },
 
-  _model(glm::mat4(1)),
+  _model(glm::mat4(0)),
   _colour(glm::vec3(0)),
   _position(glm::vec3(0)),
   _rotation(glm::vec3(0)),
   _scale(glm::vec3(1)),
+  _anchorPoint(glm::vec3(0)),
 
   _vao(0),
   _vbo(0),
@@ -77,34 +77,60 @@ void Cube::draw() {
 
   glBindVertexArray(_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 
-void Cube::setColour(glm::vec3 colour) {
+Cube& Cube::setColour(glm::vec3 colour) {
   _colour = colour;
+  return *this;
 }
 
-void Cube::translate(glm::vec3 distance) {
+Cube& Cube::translate(glm::vec3 distance) {
   _position += distance;
+  return *this;
 }
 
-void Cube::rotate(glm::vec3 radians) {
+Cube& Cube::rotate(glm::vec3 radians) {
   _rotation += radians;
+  return *this;
 }
 
-void Cube::scale(glm::vec3 factor) {
+Cube& Cube::scale(glm::vec3 factor) {
   _scale *= factor;
+  return *this;
 }
 
-void Cube::updateModel() {
-    // Transformations follow the order: translate, rotate, scale
-    _model = glm::translate(_model, _position);
-    _model = glm::rotate(_model, _rotation.x, glm::vec3(1, 0, 0));
-    _model = glm::rotate(_model, _rotation.y, glm::vec3(0, 1, 0));
-    _model = glm::rotate(_model, _rotation.z, glm::vec3(0, 0, 1));
-    _model = glm::scale(_model, _scale);
+
+glm::mat4 Cube::updateModel(glm::mat4 transformModel) {
+
+  glm::vec4 anchorPoint = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+  glm::vec4 localOffset = glm::vec4(0.0f, 0.125f, 0.0f, 0.0f);
+
+  glm::vec4 vectorRight   = glm::normalize(transformModel * glm::vec4(1, 0, 0, 0));
+  glm::vec4 vectorUp      = glm::normalize(transformModel * glm::vec4(0, 1, 0, 0));
+  glm::vec4 vectorForward = glm::normalize(transformModel * glm::vec4(0, 0, 1, 0));
+
+  glm::vec3 worldPosition = glm::vec3(
+    transformModel      * anchorPoint
+    + vectorRight   * _position.x
+    + vectorUp      * _position.y
+    + vectorForward * _position.z
+  );
+
+  // Transformations follow the order: translate, rotate, scale
+  // _model = glm::translate(_model, _position);
+  transformModel = glm::translate(transformModel, worldPosition);
+
+  transformModel = glm::rotate(transformModel, _rotation.x, glm::vec3(1, 0, 0));
+  transformModel = glm::rotate(transformModel, _rotation.y, glm::vec3(0, 1, 0));
+  transformModel = glm::rotate(transformModel, _rotation.z, glm::vec3(0, 0, 1));
+
+  _model = glm::scale(transformModel, _scale);  // want to send translation and rotation to children, but not the scaling
+  
+  return transformModel;
 }
+
 
 void Cube::print() {
   std::cout << glm::to_string(_position) << std::endl;

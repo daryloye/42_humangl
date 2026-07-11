@@ -1,7 +1,8 @@
 NAME = humangl
 
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror
+# CXXFLAGS = -Wall -Wextra -Werror
+CXXFLAGS = -Werror
 LDFLAGS = -lSDL2 -ldl
 
 SRC_DIR = src

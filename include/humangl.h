@@ -13,6 +13,7 @@
 #include <glm/ext/matrix_clip_space.hpp>        // glm::perspective
 #include <glm/ext/scalar_constants.hpp>         // glm::pi
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #define SCREEN_HEIGHT   800
 #define SCREEN_WIDTH    800
@@ -44,6 +45,7 @@ class Cube {
     glm::vec3   _position;
     glm::vec3   _rotation;
     glm::vec3   _scale;
+    glm::vec3   _anchorPointToTorso;
     
 		GLuint	_vao;
 		GLuint	_vbo;
@@ -54,11 +56,13 @@ class Cube {
     void upload();
     void draw();
     
-    void setColour(glm::vec3 colour);
-    void translate(glm::vec3 distance);
-    void rotate(glm::vec3 radians);
-    void scale(glm::vec3 factor);
-    void updateModel(); 
+    Cube& setColour(glm::vec3 colour);
+    Cube& translate(glm::vec3 distance);
+    Cube& rotate(glm::vec3 radians);
+    Cube& scale(glm::vec3 factor);
+    
+    glm::mat4 updateModel(glm::mat4 baseModel); 
+    
     void print();
 };
 

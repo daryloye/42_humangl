@@ -1,8 +1,16 @@
 #include "humangl.h"
 
 Human::Human() {
-    head.setColour(glm::vec3(0.93f, 0.91f, 0.82f));
-    torso.setColour(glm::vec3(0.0f, 1.0f, 0.0f));
+    torso.setColour(glm::vec3(0.0f, 1.0f, 0.0f))
+         .scale(glm::vec3(0.25f, 0.50f, 0.25f))
+         .translate(glm::vec4(0.0f, -0.25f, 0.0f, 0.0f))
+         .rotate(glm::vec3(0.1, 0.1, 0.5));
+    glm::mat4 torsoTransform = torso.updateModel(glm::mat4(1.0f));
+
+    head.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
+        .scale(glm::vec3(0.25, 0.25, 0.25))
+        .translate(glm::vec4);
+    head.updateModel(torsoTransform);
     
     // leftUpperArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f));
     // leftLowerArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f));
@@ -13,22 +21,10 @@ Human::Human() {
     // leftLowerLeg.setColour(glm::vec3(0.0f, 0.0f, 1.0f));
     // rightUpperLeg.setColour(glm::vec3(0.0f, 0.0f, 1.0f));
     // rightLowerLeg.setColour(glm::vec3(0.0f, 0.0f, 1.0f));
-
-    glm::vec4 headAnchorPoint = glm::vec4(0.0f, 0.5f, 0.0f, 1.0f);
-
-    torso.translate(glm::vec3(0, -0.25, 0));
-    torso.rotate(glm::vec3(0.1, 0.1, 0.5));
-    torso.scale(glm::vec3(0.25f, 0.50f, 0.25f));
-    torso.updateModel();
     
-    headAnchorPoint = torso._model * headAnchorPoint;
-    glm::vec3 headUpVector = glm::normalize(glm::vec3(torso._model * glm::vec4(0, 1, 0, 0)));
-    
-    head.translate(glm::vec3(headAnchorPoint) + headUpVector * 0.125f);
-    head.scale(glm::vec3(0.25, 0.25, 0.25));
-    head.rotate(torso._rotation);
-    head.updateModel();
-
+    // head.translate(worldPosition)
+    //     .rotate(torso._rotation);
+    // head.updateModel(glm::mat4(1.0f));
 }
 
 void Human::upload() {

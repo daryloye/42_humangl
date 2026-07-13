@@ -91,15 +91,13 @@ Cube& Cube::setColour(glm::vec3 colour) {
 
 
 Cube& Cube::attachTo(Cube& parent, glm::vec3 anchorPoint, glm::vec3 direction) {
-    _parent = &parent;
+  _parent = &parent;
 
-    // sets the anchor point relative to the parent cube
-    _anchorPoint = anchorPoint * _parent->_scale;
-    _position = 0.5f * direction * _scale;
-    _rotation = _parent->_rotation;
-    _transformModel = _parent->_transformModel;
+  // sets the anchor point relative to the parent cube
+  _anchorPoint = anchorPoint * _parent->_scale;
+  _position = 0.5f * direction * _scale;
 
-    return *this;
+  return *this;
 }
 
 
@@ -122,27 +120,21 @@ Cube& Cube::scale(glm::vec3 factor) {
 
 
 Cube& Cube::updateModel() {
-  // worldPosition aligns children cubes to the parent's position
-  glm::vec4 vectorRight   = glm::normalize(_transformModel * glm::vec4(1, 0, 0, 0));
-  glm::vec4 vectorUp      = glm::normalize(_transformModel * glm::vec4(0, 1, 0, 0));
-  glm::vec4 vectorForward = glm::normalize(_transformModel * glm::vec4(0, 0, 1, 0));
-  
-  glm::vec3 worldPosition = glm::vec3(
-    _transformModel  * glm::vec4(_anchorPoint, 1.0f)
-    + vectorRight   * _position.x
-    + vectorUp      * _position.y
-    + vectorForward * _position.z
-  );
+  if (_parent) {
+    _transformModel = _parent->_transformModel;
+  } else {
+    _transformModel = glm::mat4(1.0f);
+  }
   
   // Transformations follow the order: translate, rotate, scale
-  _transformModel = glm::mat4(1.0f);
-
-  _transformModel = glm::translate(_transformModel, worldPosition);
-
+  _transformModel = glm::translate(_transformModel, _anchorPoint);
+  
   _transformModel = glm::rotate(_transformModel, _rotation.x, glm::vec3(1, 0, 0));
   _transformModel = glm::rotate(_transformModel, _rotation.y, glm::vec3(0, 1, 0));
   _transformModel = glm::rotate(_transformModel, _rotation.z, glm::vec3(0, 0, 1));
-
+  
+  _transformModel = glm::translate(_transformModel, _position);
+  
   // want to send translation and rotation to children, but not the scaling
   _model = glm::scale(_transformModel, _scale);  
   
@@ -150,8 +142,13 @@ Cube& Cube::updateModel() {
 }
 
 
+glm::vec3 Cube::getRotation() {
+  return _rotation;
+}
+
+
 void Cube::print() {
-  std::cout << glm::to_string(_position) << std::endl;
+  std::cout << glm::to_string(_transformModel) << std::endl;
   // std::cout << "scale x: " << glm::length(glm::vec3(_model[0])) << std::endl;
   // std::cout << "scale y: " << glm::length(glm::vec3(_model[1])) << std::endl;
   // std::cout << "scale z: " << glm::length(glm::vec3(_model[2])) << std::endl;

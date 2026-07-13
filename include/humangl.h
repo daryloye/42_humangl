@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <chrono>
 
 #include <SDL2/SDL.h>
 #include <glad/glad.h>
@@ -21,10 +22,9 @@
 inline SDL_Window* gWindow = nullptr;
 inline SDL_GLContext gGLContext = nullptr;
 
-inline bool isRunning = true;
-inline float g_offset = 0.0f;
-
 inline GLuint gShaderProgram = 0;
+
+inline bool isRunning = true;
 
 // render.cpp
 void initialize();
@@ -33,6 +33,12 @@ void cleanup();
 
 // shader.cpp
 void createGraphicsPipeline();
+
+enum class Movement {
+  None,
+  Jump,
+  Walk
+};
 
 // cube.cpp
 class Cube {
@@ -67,12 +73,14 @@ class Cube {
     Cube& scale(glm::vec3 factor);
     Cube& updateModel(); 
     
+    glm::vec3 getRotation();
+
     void print();
 };
 
 // human.cpp
 class Human {
-  public:
+  private:
     Cube head;
     Cube torso;
 
@@ -86,9 +94,18 @@ class Human {
     Cube rightUpperLeg;
     Cube rightLowerLeg;
 
+    Movement _movement;
+    uint     _movementStage;
+    uint     _movementStep;
+    std::chrono::steady_clock::time_point _movementStartTime;
+  
+  public:
     Human();
     void upload();
     void draw();
+    void rotate();
+    void handleJump();
+    void handleWalk();
 };
 
 inline Human human = Human();

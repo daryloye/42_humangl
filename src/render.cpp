@@ -56,11 +56,13 @@ void input() {
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
 					case SDLK_UP:
-						g_offset += 0.01;
-						human.head.print();
+						human.handleJump();
 						break;
-					case SDLK_DOWN:
-						g_offset -= 0.01;
+					case SDLK_LEFT:
+						human.handleWalk();
+						break;
+					case SDLK_RIGHT:
+						human.handleWalk();
 						break;
 				}
 				break;
@@ -70,15 +72,18 @@ void input() {
 
 
 void draw() {
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClearColor(0, 0, 0, 0);								// black colour background
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 	glUseProgram(gShaderProgram);
+	
+	human.rotate();
 	human.draw();
+	
 	glUseProgram(0);		// stop using shader program
 }
 

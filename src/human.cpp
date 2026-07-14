@@ -5,7 +5,7 @@ Human::Human()
   _movementStage(0), _movementStep(0)
 {
     torso.setColour(glm::vec3(0.0f, 1.0f, 0.0f))
-         .rotate(glm::vec3(0.1f, 0.0f, 0.0f))
+         .rotate(glm::vec3(0.2f, 0.0f, 0.0f))
          .scale(glm::vec3(0.25f, 0.50f, 0.125f))
          .updateModel();
 
@@ -14,49 +14,54 @@ Human::Human()
         .attachTo(torso, glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f))
         .updateModel();
 
-    leftUpperArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
+    leftUpperArm.setColour(glm::vec3(0.0f, 1.0f, 0.0f))
                 .scale(glm::vec3(0.25f, 0.125f, 0.125f))
+                .rotate(glm::vec3(0.0f, 0.0f, glm::radians(90.0f)) + LIMB_BASE_ROTATION)
                 .attachTo(torso, glm::vec3(-0.5f, 0.375f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f))
-                // .rotate(glm::vec3(0.0f, 0.0f, glm::radians(90.0f)))
                 .updateModel();
 
-    leftLowerArm.setColour(glm::vec3(1.0f, 0.0f, 1.0f))
+    leftLowerArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                 .scale(glm::vec3(0.25f, 0.125f, 0.125f))
                 .attachTo(leftUpperArm, glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f))
                 .updateModel();
 
-    rightUpperArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
+    rightUpperArm.setColour(glm::vec3(0.0f, 1.0f, 0.0f))
                  .scale(glm::vec3(0.25f, 0.125f, 0.125f))
+                 .rotate(glm::vec3(0.0f, 0.0f, glm::radians(-90.0f)) - LIMB_BASE_ROTATION)
                  .attachTo(torso, glm::vec3(0.5f, 0.375f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f))
-                // .rotate(glm::vec3(0.0f, 0.0f, glm::radians(-90.0f)))
                  .updateModel();
 
-    rightLowerArm.setColour(glm::vec3(1.0f, 0.0f, 1.0f))
+    rightLowerArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                  .scale(glm::vec3(0.25f, 0.125f, 0.125f))
                  .attachTo(rightUpperArm, glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f))
                  .updateModel();
 
     leftUpperLeg.setColour(glm::vec3(0.0f, 0.3f, 1.0f))
                 .scale(glm::vec3(0.125f, 0.25f, 0.125f))
+                .rotate(LIMB_BASE_ROTATION)
                 .attachTo(torso, glm::vec3(0.25, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
-                .rotate(glm::vec3(0.25f, 0.0f, 0.0f))
                 .updateModel();
 
-    leftLowerLeg.setColour(glm::vec3(0.0f, 0.3f, 1.0f))
+    leftLowerLeg.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                 .scale(glm::vec3(0.125f, 0.25f, 0.125f))
                 .attachTo(leftUpperLeg, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
                 .updateModel();
 
     rightUpperLeg.setColour(glm::vec3(0.0f, 0.3f, 1.0f))
                  .scale(glm::vec3(0.125f, 0.25f, 0.125f))
+                 .rotate(-LIMB_BASE_ROTATION)
                  .attachTo(torso, glm::vec3(-0.25, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
-                 .rotate(glm::vec3(-0.25f, 0.0f, 0.0f))
                  .updateModel();
 
-    rightLowerLeg.setColour(glm::vec3(0.0f, 0.3f, 1.0f))
+    rightLowerLeg.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                  .scale(glm::vec3(0.125f, 0.25f, 0.125f))
                  .attachTo(rightUpperLeg, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
                  .updateModel();
+
+    tail.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
+        .scale(glm::vec3(0.125f, 0.125f, 0.25f))
+        .attachTo(torso, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+        .updateModel();
 }
 
 void Human::upload() {
@@ -72,6 +77,8 @@ void Human::upload() {
     leftLowerLeg.upload();
     rightUpperLeg.upload();
     rightLowerLeg.upload();
+
+    tail.upload();
 }
 
 void Human::draw() {
@@ -87,43 +94,12 @@ void Human::draw() {
     leftLowerLeg.draw();
     rightUpperLeg.draw();
     rightLowerLeg.draw();
+
+    tail.draw();
 }
 
-void Human::rotate() {
-    if (_movement == Movement::Jump) {
-        auto elapsedTimeMs = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::steady_clock::now() - _movementStartTime
-        );
-        if (elapsedTimeMs.count() >= 2000) {
-            _movement = Movement::None;
-        } else {
-            std::cout << "Jump " << elapsedTimeMs.count() << std::endl;
-        }
-    }
-
-    if (_movement == Movement::Walk) {
-        _movementStep++;
-        if (_movementStep < 150) {
-            leftUpperLeg.rotate(glm::vec3(0.01f, 0.0f, 0.0f));
-            rightUpperLeg.rotate(glm::vec3(-0.01f, 0.0f, 0.0f));
-        }
-        else if (_movementStep < 450) {
-            leftUpperLeg.rotate(glm::vec3(-0.01f, 0.0f, 0.0f));
-            rightUpperLeg.rotate(glm::vec3(0.01f, 0.0f, 0.0f));
-        }
-        else if (_movementStep < 600) {
-            leftUpperLeg.rotate(glm::vec3(0.01f, 0.0f, 0.0f));
-            rightUpperLeg.rotate(glm::vec3(-0.01f, 0.0f, 0.0f));
-        }
-        else {
-            _movementStep = 0;
-            _movement = Movement::None;
-        }
-        std::cout<<_movementStep<<std::endl;
-    }
-
-    torso.rotate(glm::vec3(0.0f, 0.0025f, 0.0f))
-         .updateModel();
+void Human::updateModel() {
+    torso.updateModel();
     head.updateModel();
     leftUpperArm.updateModel();
     leftLowerArm.updateModel();
@@ -132,24 +108,60 @@ void Human::rotate() {
     leftUpperLeg.updateModel();
     leftLowerLeg.updateModel();
     rightUpperLeg.updateModel();
-    rightLowerLeg.updateModel(); 
+    rightLowerLeg.updateModel();
+    tail.updateModel(); 
 }
 
-void Human::handleJump() {
-    // auto startTime = std::chrono::steady_clock::now();
+void Human::rotate() {
+    torso.rotate(glm::vec3(0.0f, 0.00125f, 0.0f));
+}
 
-    // torso.translate(glm::vec3(0.0f, 0.010f, 0.0f))
-    //      .updateModel();
-    // head.updateModel();
-    // leftUpperArm.updateModel();
-    // leftLowerArm.updateModel();
-    // rightUpperArm.updateModel();
-    // rightLowerArm.updateModel();
-    // leftUpperLeg.updateModel();
-    // leftLowerLeg.updateModel();
-    // rightUpperLeg.updateModel();
-    // rightLowerLeg.updateModel();
+void Human::jump() {
+    if (_movement != Movement::Jump) {
+        return;
+    }
     
+    float heightMax = 0.25f;
+    float angularSpeed = glm::pi<float>();   // 0.5 cycle per second
+    
+    float elapsedSeconds = std::chrono::duration<float>(
+        std::chrono::steady_clock::now() - _movementStartTime
+    ).count();
+    
+    float height = heightMax * std::sin(angularSpeed * elapsedSeconds);
+
+    torso.setTranslation(glm::vec3(0.0f, height, 0.0f));
+
+    if (elapsedSeconds >= 1.0f) {
+        _movement = Movement::None;
+    }
+}
+
+void Human::walk() {
+    if (_movement != Movement::Walk) {
+        return;
+    }
+    
+    float angleMax = glm::radians(45.0f);
+    float angularSpeed = 2.0f * glm::pi<float>();   // 1 cycle per second
+    
+    float elapsedSeconds = std::chrono::duration<float>(
+        std::chrono::steady_clock::now() - _movementStartTime
+    ).count();
+    
+    float angle = angleMax * std::sin(angularSpeed * elapsedSeconds);
+
+    leftUpperArm.setRotation(glm::vec3(angle, 0.0f, glm::radians(90.0f)) + LIMB_BASE_ROTATION);
+    rightUpperArm.setRotation(glm::vec3(-angle, 0.0f, glm::radians(-90.0f)) - LIMB_BASE_ROTATION);
+    leftUpperLeg.setRotation(glm::vec3(angle, 0.0f, 0.0f) + LIMB_BASE_ROTATION);
+    rightUpperLeg.setRotation(glm::vec3(-angle, 0.0f, 0.0f) - LIMB_BASE_ROTATION);
+
+    if (elapsedSeconds >= 1.0f) {
+        _movement = Movement::None;
+    }
+}
+
+void Human::handleJump() {    
     if (_movement != Movement::None) {
         return;
     }

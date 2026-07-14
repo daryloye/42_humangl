@@ -81,7 +81,10 @@ void draw() {
 	
 	glUseProgram(gShaderProgram);
 	
+	human.jump();
+	human.walk();
 	human.rotate();
+	human.updateModel();
 	human.draw();
 	
 	glUseProgram(0);		// stop using shader program

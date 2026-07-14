@@ -101,8 +101,20 @@ Cube& Cube::attachTo(Cube& parent, glm::vec3 anchorPoint, glm::vec3 direction) {
 }
 
 
+Cube& Cube::setTranslation(glm::vec3 distance) {
+  _position = distance;
+  return *this;
+}
+
+
 Cube& Cube::translate(glm::vec3 distance) {
   _position += distance;
+  return *this;
+}
+
+
+Cube& Cube::setRotation(glm::vec3 radians) {
+  _rotation = radians;
   return *this;
 }
 
@@ -139,17 +151,4 @@ Cube& Cube::updateModel() {
   _model = glm::scale(_transformModel, _scale);  
   
   return *this;
-}
-
-
-glm::vec3 Cube::getRotation() {
-  return _rotation;
-}
-
-
-void Cube::print() {
-  std::cout << glm::to_string(_transformModel) << std::endl;
-  // std::cout << "scale x: " << glm::length(glm::vec3(_model[0])) << std::endl;
-  // std::cout << "scale y: " << glm::length(glm::vec3(_model[1])) << std::endl;
-  // std::cout << "scale z: " << glm::length(glm::vec3(_model[2])) << std::endl;
 }

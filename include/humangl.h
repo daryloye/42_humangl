@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <cmath>
 
 #include <SDL2/SDL.h>
 #include <glad/glad.h>
@@ -14,10 +15,11 @@
 #include <glm/ext/matrix_clip_space.hpp>        // glm::perspective
 #include <glm/ext/scalar_constants.hpp>         // glm::pi
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
 
 #define SCREEN_HEIGHT   800
 #define SCREEN_WIDTH    800
+
+#define LIMB_BASE_ROTATION  glm::vec3(0.25f, 0.0f, 0.0f)
 
 inline SDL_Window* gWindow = nullptr;
 inline SDL_GLContext gGLContext = nullptr;
@@ -68,14 +70,12 @@ class Cube {
     Cube& setColour(glm::vec3 colour);
     Cube& attachTo(Cube& parent, glm::vec3 anchorPoint, glm::vec3 direction);
 
+    Cube& setTranslation(glm::vec3 distance);
     Cube& translate(glm::vec3 distance);
+    Cube& setRotation(glm::vec3 radians);
     Cube& rotate(glm::vec3 radians);
     Cube& scale(glm::vec3 factor);
     Cube& updateModel(); 
-    
-    glm::vec3 getRotation();
-
-    void print();
 };
 
 // human.cpp
@@ -94,6 +94,8 @@ class Human {
     Cube rightUpperLeg;
     Cube rightLowerLeg;
 
+    Cube tail;
+
     Movement _movement;
     uint     _movementStage;
     uint     _movementStep;
@@ -103,7 +105,12 @@ class Human {
     Human();
     void upload();
     void draw();
+    void updateModel();
+
     void rotate();
+    void jump();
+    void walk();
+
     void handleJump();
     void handleWalk();
 };

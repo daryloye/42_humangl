@@ -1,8 +1,7 @@
 NAME = humangl
 
 CXX = c++
-# CXXFLAGS = -Wall -Wextra -Werror
-CXXFLAGS = -Werror
+CXXFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lSDL2 -ldl
 
 SRC_DIR = src
@@ -14,10 +13,6 @@ OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 .SILENT:
 
-install:
-	sudo apt update
-	sudo apt install -y libsdl2-dev libglm-dev
-
 all: $(NAME)
 
 $(NAME): $(OBJS)
@@ -26,6 +21,10 @@ $(NAME): $(OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+
+install:
+	sudo apt update
+	sudo apt install -y libsdl2-dev libglm-dev
 
 clean:
 	rm -rf $(OBJ_DIR)

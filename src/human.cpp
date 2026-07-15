@@ -22,6 +22,7 @@ Human::Human()
 
     leftLowerArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                 .scale(glm::vec3(0.25f, 0.125f, 0.125f))
+                .rotate(glm::vec3(0.0f, 0.5f, 0.0f))
                 .attachTo(leftUpperArm, glm::vec3(-0.5f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f))
                 .updateModel();
 
@@ -33,6 +34,7 @@ Human::Human()
 
     rightLowerArm.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                  .scale(glm::vec3(0.25f, 0.125f, 0.125f))
+                 .rotate(glm::vec3(0.0f, -0.5f, 0.0f))
                  .attachTo(rightUpperArm, glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f))
                  .updateModel();
 
@@ -44,6 +46,7 @@ Human::Human()
 
     leftLowerLeg.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                 .scale(glm::vec3(0.125f, 0.25f, 0.125f))
+                .rotate(glm::vec3(0.25f, 0.0f, 0.0f))
                 .attachTo(leftUpperLeg, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
                 .updateModel();
 
@@ -55,6 +58,7 @@ Human::Human()
 
     rightLowerLeg.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
                  .scale(glm::vec3(0.125f, 0.25f, 0.125f))
+                 .rotate(glm::vec3(0.25f, 0.0f, 0.0f))
                  .attachTo(rightUpperLeg, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
                  .updateModel();
 

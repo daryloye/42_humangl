@@ -94,7 +94,9 @@ class Human {
     Cube rightUpperLeg;
     Cube rightLowerLeg;
 
-    Cube tail;
+    Cube eyeLeft;
+    Cube eyeRight;
+    Cube nose;
 
     Movement _movement;
     uint     _movementStage;

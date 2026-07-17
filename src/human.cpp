@@ -62,9 +62,19 @@ Human::Human()
                  .attachTo(rightUpperLeg, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f))
                  .updateModel();
 
-    tail.setColour(glm::vec3(0.93f, 0.91f, 0.82f))
-        .scale(glm::vec3(0.125f, 0.125f, 0.25f))
-        .attachTo(torso, glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f))
+    eyeLeft.setColour(glm::vec3(0.0f, 0.0f, 0.0f))
+        .scale(glm::vec3(0.0625f, 0.03125f, 0.03125f))
+        .attachTo(head, glm::vec3(0.25f, 0.25f, 0.5f), glm::vec3(0.0f, 0.0f, 1.0f))
+        .updateModel();
+
+    eyeRight.setColour(glm::vec3(0.0f, 0.0f, 0.0f))
+        .scale(glm::vec3(0.0625f, 0.03125f, 0.03125f))
+        .attachTo(head, glm::vec3(-0.25f, 0.25f, 0.5f), glm::vec3(0.0f, 0.0f, 1.0f))
+        .updateModel();
+
+    nose.setColour(glm::vec3(0.6f, 0.3f, 0.0f))
+        .scale(glm::vec3(0.0625f, 0.0833f, 0.03125f))
+        .attachTo(head, glm::vec3(0.0f, -0.125f, 0.5f), glm::vec3(0.0f, 0.0f, 1.0f))
         .updateModel();
 }
 
@@ -82,7 +92,9 @@ void Human::upload() {
     rightUpperLeg.upload();
     rightLowerLeg.upload();
 
-    tail.upload();
+    eyeLeft.upload();
+    eyeRight.upload();
+    nose.upload();
 }
 
 void Human::draw() {
@@ -99,7 +111,9 @@ void Human::draw() {
     rightUpperLeg.draw();
     rightLowerLeg.draw();
 
-    tail.draw();
+    eyeLeft.draw();
+    eyeRight.draw();
+    nose.draw();
 }
 
 void Human::updateModel() {
@@ -113,7 +127,9 @@ void Human::updateModel() {
     leftLowerLeg.updateModel();
     rightUpperLeg.updateModel();
     rightLowerLeg.updateModel();
-    tail.updateModel(); 
+    eyeLeft.updateModel();
+    eyeRight.updateModel();
+    nose.updateModel();
 }
 
 void Human::rotate() {
